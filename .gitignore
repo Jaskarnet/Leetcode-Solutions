@@ -1,8 +1,17 @@
-bin/
-obj/
-.vs/
+# Ignore Visual Studio temporary files, build results, and
+# user-specific files.
+*.obj
+*.exe
+*.ilk
+*.log
+*.pdb
+*.idb
+*.tlog
 *.user
-*.suo
-*.vscode/
-*.csproj.user
-*.sln*
+*.filters
+*.lastbuildstate
+
+# Ignore directories
+.vs/
+x64/
+Debug/

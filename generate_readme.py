@@ -59,7 +59,7 @@ This repository contains my solutions to various LeetCode problems, implemented 
 
     for problem_dir in problem_dirs:
         problem_name = problem_dir.split(' - ', 1)[1]
-        source_code_file = f"{problem_dir}/{problem_dir}.cpp"
+        source_code_file = f"{problem_dir}/{problem_dir}/{problem_dir}.cpp"
         
         metadata = parse_cpp_file(source_code_file)
         
