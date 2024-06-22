@@ -52,6 +52,8 @@ Given a roman numeral, convert it to an integer.
 *   `s` contains only the characters `('I', 'V', 'X', 'L', 'C', 'D', 'M')`.
 *   It is **guaranteed** that `s` is a valid roman numeral in the range `[1, 3999]`.
 
+**Solution:** [Solution Code](https://github.com/yourusername/yourrepository/blob/main/13%20-%20Roman%20to%20Integer/13%20-%20Roman%20to%20Integer/13%20-%20Roman%20to%20Integer.cpp)
+
 
 
 ## Palindrome Number
@@ -85,4 +87,6 @@ _, and_ `false` _otherwise_.
 *   `-231 <= x <= 231 - 1`
 
 **Follow up:** Could you solve it without converting the integer to a string?
+
+**Solution:** [Solution Code](https://github.com/yourusername/yourrepository/blob/main/9%20-%20Palindrome%20Number/9%20-%20Palindrome%20Number/9%20-%20Palindrome%20Number.cpp)
 

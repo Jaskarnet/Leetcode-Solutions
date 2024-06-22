@@ -1,4 +1,10 @@
 import os
+import urllib.parse
+
+# GitHub details
+github_username = "yourusername"
+github_repo = "yourrepository"
+github_branch = "main"
 
 # Root directory where problem folders are located
 root_dir = "./"
@@ -28,10 +34,8 @@ for folder in sorted(os.listdir(root_dir)):
         # Log the found subfolder
         log_content += f"{folder}\n"
         
-        # Assume each folder has a description.md file inside the solution folder
-        solution_folder = os.path.join(folder_path, folder)
-        description_file = os.path.join(solution_folder, "description.md")
-        
+        # Assume each folder has a description.md file
+        description_file = os.path.join(folder_path, "description.md")
         if os.path.exists(description_file):
             # Read the description.md file
             with open(description_file, 'r', encoding='utf-8') as f:
@@ -47,10 +51,8 @@ for folder in sorted(os.listdir(root_dir)):
             problem_section = f"## {problem_name}\n\n"
             problem_section += description_content + "\n\n"
             
-            # Add problem section to list
-            problem_sections.append(problem_section)
-            
-            # Find the corresponding .cpp file
+            # Add the description comment to the .cpp file and construct GitHub link
+            solution_folder = os.path.join(folder_path, folder)
             for file in os.listdir(solution_folder):
                 if file.endswith(".cpp"):
                     cpp_file = os.path.join(solution_folder, file)
@@ -69,7 +71,17 @@ for folder in sorted(os.listdir(root_dir)):
                         with open(cpp_file, 'w', encoding='utf-8') as cpp:
                             cpp.write(description_comment + cpp_content)
                     
+                    # Encode the file path for URL
+                    encoded_file_path = urllib.parse.quote(f"{folder}/{folder}/{file}")
+                    file_link = f"https://github.com/{github_username}/{github_repo}/blob/{github_branch}/{encoded_file_path}"
+                    
+                    # Add the link to the problem section
+                    problem_section += f"**Solution:** [Solution Code]({file_link})\n\n"
+                    
                     break
+            
+            # Add problem section to list
+            problem_sections.append(problem_section)
             
 # Combine Table of Contents and problem sections
 readme_content += "\n\n".join(problem_sections)
