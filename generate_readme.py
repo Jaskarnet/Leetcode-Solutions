@@ -1,114 +1,87 @@
 import os
-import re
 
-def parse_cpp_file(file_path):
-    metadata = {
-        'Title': '',
-        'Difficulty': '',
-        'Topics': '',
-        'Description': '',
-        'Examples': '',
-        'Constraints': '',
-        'Follow-up': '',
-        'Hint': ''
-    }
+# Root directory where problem folders are located
+root_dir = "./"
+
+# Output README file
+readme_file = os.path.join(root_dir, "README.md")
+
+# Initialize the README content with introduction and table of contents header
+readme_content = "# LeetCode Solutions\n\n"
+readme_content += "This repository contains my solutions to various LeetCode problems, implemented in C++ using Visual Studio. Each problem is stored in its own folder, with only the source code included.\n\n"
+readme_content += "## Table of Contents\n"
+
+# List to store sections for each problem
+problem_sections = []
+
+# Log file to record found subfolders
+log_file = os.path.join(root_dir, "found_subfolders.log")
+log_content = "Subfolders found:\n"
+
+# Iterate through folders in the root directory
+for folder in sorted(os.listdir(root_dir)):
+    folder_path = os.path.join(root_dir, folder)
     
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-    
-    inside_comment = False
-    current_key = None
-    
-    for line in lines:
-        line = line.strip()
-        if line.startswith("/*"):
-            inside_comment = True
-            continue
-        if line.endswith("*/"):
-            inside_comment = False
-            continue
-        if inside_comment:
-            if ':' in line:
-                key, value = line.split(':', 1)
-                key = key.strip()
-                value = value.strip()
-                if key in metadata:
-                    current_key = key
-                    metadata[key] = value
-                else:
-                    if current_key:
-                        metadata[current_key] += f'\n{line}'
-            else:
-                if current_key:
-                    metadata[current_key] += f'\n{line}'
-    return metadata
+    # Check if the item is a directory and not a hidden folder or this script itself
+    if os.path.isdir(folder_path) and not folder.startswith('.') and folder != "__pycache__":
 
-def generate_readme():
-    readme_content = """# LeetCode Solutions
-
-This repository contains my solutions to various LeetCode problems, implemented in C++ using Visual Studio. Each problem is stored in its own folder, with only the source code included.
-
-## Table of Contents
-"""
-    root_dir = '.'
-    problem_dirs = [d for d in os.listdir(root_dir) if os.path.isdir(d) and re.match(r'\d+ - ', d)]
-    
-    for problem_dir in problem_dirs:
-        problem_name = problem_dir.split(' - ', 1)[1]
-        readme_content += f"- [{problem_name}](#{problem_name.lower().replace(' ', '-')})\n"
-
-    for problem_dir in problem_dirs:
-        problem_name = problem_dir.split(' - ', 1)[1]
-        source_code_file = f"{problem_dir}/{problem_dir}/{problem_dir}.cpp"
+        # Log the found subfolder
+        log_content += f"{folder}\n"
         
-        metadata = parse_cpp_file(source_code_file)
+        # Assume each folder has a description.md file inside the solution folder
+        solution_folder = os.path.join(folder_path, folder)
+        description_file = os.path.join(solution_folder, "description.md")
         
-        readme_content += f"""
-## {metadata['Title']}
+        if os.path.exists(description_file):
+            # Read the description.md file
+            with open(description_file, 'r', encoding='utf-8') as f:
+                description_content = f.read().strip()
 
-**Difficulty:** {metadata['Difficulty']}  
-**Topics:** {metadata['Topics']}  
+            # Extract problem name for generating anchor link
+            problem_name = folder.split(' - ', 1)[1]
 
-**Description:**  
-{metadata['Description']}
+            # Append to Table of Contents
+            readme_content += f"- [{problem_name}](#{problem_name.lower().replace(' ', '-')})\n"
 
-**Examples:**  
-{metadata['Examples']}
+            # Construct problem section
+            problem_section = f"## {problem_name}\n\n"
+            problem_section += description_content + "\n\n"
+            
+            # Add problem section to list
+            problem_sections.append(problem_section)
+            
+            # Find the corresponding .cpp file
+            for file in os.listdir(solution_folder):
+                if file.endswith(".cpp"):
+                    cpp_file = os.path.join(solution_folder, file)
+                    
+                    # Read the current content of the .cpp file
+                    with open(cpp_file, 'r', encoding='utf-8') as cpp:
+                        cpp_content = cpp.read()
+                    
+                    # Prepare the description comment
+                    description_comment = "\n".join([f"// {line}" for line in description_content.split("\n")])
+                    description_comment = f"// Description:\n{description_comment}\n\n"
+                    
+                    # Check if the comment already exists in the .cpp file
+                    if description_comment not in cpp_content:
+                        # Write the new content with the description at the top
+                        with open(cpp_file, 'w', encoding='utf-8') as cpp:
+                            cpp.write(description_comment + cpp_content)
+                    
+                    break
+            
+# Combine Table of Contents and problem sections
+readme_content += "\n\n".join(problem_sections)
 
-**Constraints:**  
-{metadata['Constraints']}
+# Write the README content to README.md
+with open(readme_file, 'w', encoding='utf-8') as readme:
+    readme.write(readme_content)
 
-**Follow-up:**  
-{metadata['Follow-up']}
+print(f"README.md has been generated in {readme_file}")
 
-**Hint:**  
-{metadata['Hint']}
+# Write found subfolders to log file
+with open(log_file, 'w', encoding='utf-8') as log:
+    log.write(log_content)
 
-**Solution:**  
-[Solution Code]({source_code_file})
-"""
-
-    readme_content += """
-## How to Use
-
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/yourrepositoryname.git
-    ```
-2. Navigate to the problem folder you are interested in.
-3. Open the solution file in Visual Studio to view and run the code.
-
-## Contributing
-
-Feel free to contribute by submitting a pull request. Please ensure your solutions are well-documented and follow the repository's structure.
-
-## License
-
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-"""
-
-    with open('README.md', 'w') as readme_file:
-        readme_file.write(readme_content)
-
-if __name__ == "__main__":
-    generate_readme()
+print(f"List of found subfolders has been logged in {log_file}")

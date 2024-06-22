@@ -1,12 +1,3 @@
-# LeetCode Solutions
-
-This repository contains my solutions to various LeetCode problems, implemented in C++ using Visual Studio. Each problem is stored in its own folder, with only the source code included.
-
-## Table of Contents
-- [Roman to Integer](#roman-to-integer)
-- [Palindrome Number](#palindrome-number)
-## Roman to Integer
-
 Roman numerals are represented by seven different symbols: `I`, `V`, `X`, `L`, `C`, `D` and `M`.
 
 **Symbol**       **Value**
@@ -51,38 +42,3 @@ Given a roman numeral, convert it to an integer.
 *   `1 <= s.length <= 15`
 *   `s` contains only the characters `('I', 'V', 'X', 'L', 'C', 'D', 'M')`.
 *   It is **guaranteed** that `s` is a valid roman numeral in the range `[1, 3999]`.
-
-
-
-## Palindrome Number
-
-Given an integer `x`, return `true` _if_ `x` _is a_
-
-_**palindrome**_
-
-_, and_ `false` _otherwise_.
-
-**Example 1:**
-
-**Input:** x = 121
-**Output:** true
-**Explanation:** 121 reads as 121 from left to right and from right to left.
-
-**Example 2:**
-
-**Input:** x = -121
-**Output:** false
-**Explanation:** From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
-
-**Example 3:**
-
-**Input:** x = 10
-**Output:** false
-**Explanation:** Reads 01 from right to left. Therefore it is not a palindrome.
-
-**Constraints:**
-
-*   `-231 <= x <= 231 - 1`
-
-**Follow up:** Could you solve it without converting the integer to a string?
-
