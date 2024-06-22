@@ -2,8 +2,8 @@ import os
 import urllib.parse
 
 # GitHub details
-github_username = "yourusername"
-github_repo = "yourrepository"
+github_username = "Jaskarnet"
+github_repo = "Leetcode-Solutions"
 github_branch = "main"
 
 # Root directory where problem folders are located
